@@ -1,5 +1,3 @@
-const 정답 = "APPLE";
-
 let attempts = 0;
 let index = 0;
 let timer;
@@ -25,8 +23,14 @@ function appStart() {
     index = 0;
   };
 
-  const handleEnterKey = () => {
+  const handleEnterKey = async () => {
     let 맞은_갯수 = 0;
+    const 응답 = await fetch("/answer");
+    console.log("응답", 응답);
+    const 정답_객체 = await 응답.json();
+    console.log("정답 객체", 정답_객체);
+    const 정답 = 정답_객체.answer;
+    console.log("정답", 정답);
     const keyboardColumns = Array.from(
       document.querySelectorAll(".keyboard-column")
     );
@@ -44,6 +48,9 @@ function appStart() {
         맞은_갯수 += 1;
         block.style.background = "#6AAA64";
         block.style.animation = "correct-animation 2s ease-in-out";
+        if (keyboardBlock) {
+          keyboardBlock.style.background = "#C9B458";
+        }
       } else if (정답.includes(입력한_글자)) {
         block.style.background = "#C9B458";
         block.style.animation = "incorrect-animation 2s ease-in-out";
@@ -74,8 +81,8 @@ function appStart() {
   const handleClick = (event) => {
     if (event.target.matches("[data-key]")) {
       function clickKey() {
-        const k = event.target.dataset.key;
-        return k;
+        const mouseClick = event.target.dataset.key;
+        return mouseClick;
       }
     }
     const thisBlock = document.querySelector(
